@@ -618,8 +618,14 @@ $stations = $conn->query("SELECT * FROM stations ORDER BY name ASC");
                 <p>Updated: <?php echo date('h:i:s A', strtotime($row['created_at'])); ?></p>
               </div>
               <?php
-                $currentUserRating = $conn->query("SELECT rating FROM reviews WHERE user_id={$_SESSION['user_id']} AND station_id=$s_id LIMIT 1")->fetch_assoc();
-                $selectedRating = $currentUserRating ? (int)$currentUserRating['rating'] : 0;
+                $selectedRating = 0;
+                if(isset($_SESSION['user_id'])){
+                  $ratingStmt = $conn->prepare("SELECT rating FROM reviews WHERE user_id=? AND station_id=? LIMIT 1");
+                  $ratingStmt->bind_param("ii", $_SESSION['user_id'], $s_id);
+                  $ratingStmt->execute();
+                  $currentUserRating = $ratingStmt->get_result()->fetch_assoc();
+                  $selectedRating = $currentUserRating ? (int)$currentUserRating['rating'] : 0;
+                }
               ?>
               <div class="card-review">
                 <form method="POST" action="user_handler.php" class="station-rating-form">
