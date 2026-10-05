@@ -28,7 +28,7 @@ if($activeToken){
     }
 }
 
-$historyResult = $conn->query("SELECT t.*, s.name as station_name FROM tokens t JOIN stations s ON t.station_id = s.id WHERE t.user_id=$user_id AND t.status = 'Completed' ORDER BY t.created_at DESC");
+$historyResult = $conn->query("SELECT t.*, s.name as station_name, c.car_id AS registered_car_id FROM tokens t JOIN stations s ON t.station_id = s.id LEFT JOIN cars c ON c.user_id = t.user_id AND c.car_id = t.car_id WHERE t.user_id=$user_id AND t.status = 'Completed' ORDER BY t.created_at DESC");
 ?>
 <!doctype html>
 <html lang="en">
@@ -454,6 +454,7 @@ $historyResult = $conn->query("SELECT t.*, s.name as station_name FROM tokens t 
             <th>Date</th>
             <th>Station</th>
             <th>Vehicle</th>
+            <th>Car ID</th>
             <th>Fuel</th>
             <th>Liters</th>
             <th>Serial</th>
@@ -466,6 +467,7 @@ $historyResult = $conn->query("SELECT t.*, s.name as station_name FROM tokens t 
                 <td><?php echo date('M d, Y', strtotime($h['created_at'])); ?></td>
                 <td><?php echo htmlspecialchars($h['station_name']); ?></td>
                 <td><?php echo ucfirst($h['vehicle_type'] ?? 'car'); ?></td>
+                <td><?php echo $h['registered_car_id'] !== null ? htmlspecialchars((string)$h['registered_car_id']) : '-'; ?></td>
                 <td><?php echo ucfirst($h['fuel_type']); ?></td>
                 <td><?php echo $h['liters']; ?> L</td>
                 <td>#<?php echo $h['serial_number']; ?></td>
@@ -473,7 +475,7 @@ $historyResult = $conn->query("SELECT t.*, s.name as station_name FROM tokens t 
             <?php endwhile; ?>
           <?php else: ?>
             <tr>
-              <td colspan="6" style="text-align: center;">No history available.</td>
+              <td colspan="7" style="text-align: center;">No history available.</td>
             </tr>
           <?php endif; ?>
         </tbody>
