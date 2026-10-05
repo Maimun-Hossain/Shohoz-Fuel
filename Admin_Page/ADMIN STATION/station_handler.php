@@ -91,20 +91,42 @@ if($action == 'toggle'){
 }
 
 if($action == 'log_liter'){
-    $id = $_POST['station_id'];
-    $petrol_add = (float)$_POST['petrol_add'];
-    $diesel_add = (float)$_POST['diesel_add'];
+    $fallback = ($_SESSION['role'] == 'admin') ? 'index.php' : '../../Staff_Page/STAFF STATION/index.php';
+    $redirect = $_SERVER['HTTP_REFERER'] ?? $fallback;
+    $stationId = filter_var($_POST['station_id'] ?? null, FILTER_VALIDATE_INT);
+    $petrolRaw = $_POST['petrol_add'] ?? '0';
+    $dieselRaw = $_POST['diesel_add'] ?? '0';
 
-    if($conn->query("UPDATE stations SET petrol_stock = petrol_stock + $petrol_add, diesel_stock = diesel_stock + $diesel_add WHERE id=$id")){
-        $conn->query("INSERT INTO logs (user_id, action, details) VALUES ($user_id, 'Log Liter', 'Added $petrol_add L Petrol and $diesel_add L Diesel to station ID $id')");
-        
-        if(isset($_SERVER['HTTP_REFERER'])){
-            header("Location: " . $_SERVER['HTTP_REFERER']);
+    if($stationId === false || $stationId === null || $stationId < 1 || !is_numeric($petrolRaw) || !is_finite((float)$petrolRaw) || (float)$petrolRaw < 0 || !is_numeric($dieselRaw) || !is_finite((float)$dieselRaw) || (float)$dieselRaw < 0 || ((float)$petrolRaw == 0 && (float)$dieselRaw == 0)){
+        $separator = strpos($redirect, '?') === false ? '?' : '&';
+        header("Location: " . $redirect . $separator . "msg=Enter a valid positive stock amount.");
+        exit();
+    }
+
+    $petrolAdd = (float)$petrolRaw;
+    $dieselAdd = (float)$dieselRaw;
+    $conn->begin_transaction();
+    try{
+        $stockStmt = $conn->prepare("UPDATE stations SET petrol_stock = petrol_stock + ?, diesel_stock = diesel_stock + ? WHERE id = ?");
+        $stockStmt->bind_param("ddi", $petrolAdd, $dieselAdd, $stationId);
+        $stockStmt->execute();
+        if($stockStmt->affected_rows !== 1){
+            throw new RuntimeException("Station not found.");
         }
-        else{
-            $fallback = ($_SESSION['role'] == 'admin') ? 'index.php' : '../../Staff_Page/STAFF STATION/index.php';
-            header("Location: $fallback");
-        }
+
+        $details = "Added $petrolAdd L Petrol and $dieselAdd L Diesel to station ID $stationId";
+        $logStmt = $conn->prepare("INSERT INTO logs (user_id, action, details) VALUES (?, 'Log Liter', ?)");
+        $logStmt->bind_param("is", $user_id, $details);
+        $logStmt->execute();
+        $conn->commit();
+
+        header("Location: " . $redirect);
+        exit();
+    }
+    catch(Throwable $e){
+        $conn->rollback();
+        $separator = strpos($redirect, '?') === false ? '?' : '&';
+        header("Location: " . $redirect . $separator . "msg=Stock update failed.");
         exit();
     }
 }

@@ -427,13 +427,13 @@ $stations = $conn->query("SELECT * FROM stations ORDER BY created_at DESC");
           <input type="hidden" name="action" value="log_liter">
           <input type="hidden" name="station_id" id="logStationId">
           <div class="modal-body">
-            <div id="petrolLog" style="display:none;">
+            <div id="petrolLog">
               <label>Add Petrol (Liters)</label>
-              <input type="number" name="petrol_add" value="0">
+              <input type="number" name="petrol_add" value="0" min="0" step="0.01">
             </div>
-            <div id="dieselLog" style="display:none;">
+            <div id="dieselLog">
               <label>Add Diesel (Liters)</label>
-              <input type="number" name="diesel_add" value="0">
+              <input type="number" name="diesel_add" value="0" min="0" step="0.01">
             </div>
           </div>
           <div class="modal-footer">
@@ -473,23 +473,8 @@ $stations = $conn->query("SELECT * FROM stations ORDER BY created_at DESC");
         });
       }
 
-      function openLogModal(id, p, d){
+      function openLogModal(id){
         document.getElementById('logStationId').value = id;
-        
-        if(p){
-          document.getElementById('petrolLog').style.display = 'block';
-        }
-        else{
-          document.getElementById('petrolLog').style.display = 'none';
-        }
-
-        if(d){
-          document.getElementById('dieselLog').style.display = 'block';
-        }
-        else{
-          document.getElementById('dieselLog').style.display = 'none';
-        }
-
         document.getElementById('logModal').style.display = 'block';
       }
 
