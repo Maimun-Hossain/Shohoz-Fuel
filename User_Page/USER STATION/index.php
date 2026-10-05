@@ -468,7 +468,6 @@ $stations = $conn->query("SELECT * FROM stations ORDER BY name ASC");
             <button onclick="filterByStatus('all')">All Stations</button>
             <button onclick="filterByStatus('nearest')">Nearest</button>
             <button onclick="filterByStatus('AVAILABLE')">Available</button>
-            <button onclick="filterByStatus('NO STOCK')">No Stock</button>
           </div>
         </div>
       </div>
