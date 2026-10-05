@@ -1,0 +1,145 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+.banner-1{
+    /* margin: auto; */
+    /* width: 744px; */
+
+    background-color: #0F051A;
+}
+.title-1{
+    color: aliceblue;
+    width: 319px;
+    height: 34px;
+    padding-top: 44px;
+    padding-left: 27px;
+    font-size: bold;
+    font-weight: 700px;
+}
+.card-container{
+    display: flex;
+    /* justify-content: space-around;
+    align-items: center; */
+    padding-bottom: 87px;
+}
+.card-1{
+    background-color: rgba(48, 43, 63, 1);
+    width: 670px;
+
+     /* text-align: center; */
+    /* margin: auto; */
+    margin-left: 25px;
+    margin-top: 70px;
+    padding-left: 15px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    border-radius: 25px;
+    color: white;
+}
+.card-2{
+    /* border: 1px solid red; */
+    background-color: rgba(48, 43, 63, 1);
+    width: 670px;
+    margin-left: 50px;
+    margin-top: 70px;
+    padding-bottom: 20px;
+    padding-left: 15px;
+    padding-top: 20px;
+    border-radius: 25px;
+    color: white;
+}
+.card-text1{
+    padding-top: 18px;
+    padding-bottom: 18px;
+    color: grey;
+    font-weight: 400;
+    font-style: regular;
+    font-size: 15px;
+}
+.card-text2{
+     padding-top: 12px;
+    padding-bottom: 12px;
+    color: grey;
+    font-weight: 400;
+    font-style: regular;
+    font-size: 14px;
+}
+.btn{
+    padding: 6px 6px;
+    border-radius: 8px;
+    border: none;
+}
+.img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding-right: 20px;
+}
+
+@media(max-width: 850px){
+    .navbar{
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 15px 30px;
+        text-align: left;
+    }
+
+    .hamburger{
+        display: flex;
+    }
+
+    .navbar .nav-links{
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #302b3f;
+        padding: 20px 0;
+        gap: 15px;
+        z-index: 1000;
+        border-bottom: 1px solid #4a435d;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+    }
+
+    .navbar .nav-links.active{
+        display: flex;
+    }
+
+    .title-1{
+        width: 100%;
+        padding-left: 0;
+        text-align: center;
+        height: auto;
+    }
+
+    .card-container{
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 40px;
+    }
+
+    .card-1, .card-2{
+        width: 90% !important;
+        margin-left: 0 !important;
+        margin-top: 30px !important;
+        padding: 20px !important;
+    }
+
+    .dropdown-menu{
+      position: static;
+      width: 100%;
+      box-shadow: none;
+      border: none;
+      margin-top: 0;
+      background-color: transparent;
+    }
+
+    .dropdown-menu a{
+      padding-left: 0;
+      color: #cccccc;
+    }
+}
