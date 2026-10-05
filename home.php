@@ -565,7 +565,7 @@ include 'db.php';
     <main>
       <section class="hero">
         <div class="hero-content">
-          <span class="hero-tag">SMART FUEL ACCESS</span>
+          <span class="hero-tag">🟢SMART FUEL ACCESS</span>
           <h1>Fuel Faster, Drive Further</h1>
           <p>
             Reliable access to fuel stations with queue-aware service and
