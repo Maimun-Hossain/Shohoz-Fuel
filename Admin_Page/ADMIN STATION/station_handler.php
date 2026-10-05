@@ -31,11 +31,19 @@ if($action == 'update_daily_limits' && $_SESSION['role'] == 'admin'){
 if($action == 'add' && $_SESSION['role'] == 'admin'){
     $name = $_POST['name'];
     $location = $_POST['location'];
+    $locationX = $_POST['location_x'] ?? null;
+    $locationY = $_POST['location_y'] ?? null;
+    if(!is_numeric($locationX) || !is_finite((float)$locationX) || !is_numeric($locationY) || !is_finite((float)$locationY)){
+        header("Location: index.php?msg=Enter valid station coordinates.");
+        exit();
+    }
+    $locationX = (float)$locationX;
+    $locationY = (float)$locationY;
     $img_url = $_POST['img_url'] ?: '../../Assets/card-im.png';
     $map_link = $_POST['map_link'];
     $on_off_status = isset($_POST['on_off_status']) && $_POST['on_off_status'] === 'off' ? 'off' : 'on';
-    $stmt = $conn->prepare("INSERT INTO stations (name, location, img_url, map_link, on_off_status) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $name, $location, $img_url, $map_link, $on_off_status);
+    $stmt = $conn->prepare("INSERT INTO stations (name, location, location_x, location_y, img_url, map_link, on_off_status) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssddsss", $name, $location, $locationX, $locationY, $img_url, $map_link, $on_off_status);
     
     if($stmt->execute()){
         $conn->query("INSERT INTO logs (user_id, action, details) VALUES ($user_id, 'Add Station', 'Added station: $name')");
@@ -50,11 +58,19 @@ if($action == 'edit' && $_SESSION['role'] == 'admin'){
     $id = $_POST['station_id'];
     $name = $_POST['name'];
     $location = $_POST['location'];
+    $locationX = $_POST['location_x'] ?? null;
+    $locationY = $_POST['location_y'] ?? null;
+    if(!is_numeric($locationX) || !is_finite((float)$locationX) || !is_numeric($locationY) || !is_finite((float)$locationY)){
+        header("Location: index.php?msg=Enter valid station coordinates.");
+        exit();
+    }
+    $locationX = (float)$locationX;
+    $locationY = (float)$locationY;
     $img_url = $_POST['img_url'] ?: '../../Assets/card-im.png';
     $map_link = $_POST['map_link'];
     $on_off_status = isset($_POST['on_off_status']) && $_POST['on_off_status'] === 'off' ? 'off' : 'on';
-    $stmt = $conn->prepare("UPDATE stations SET name=?, location=?, img_url=?, map_link=?, on_off_status=? WHERE id=?");
-    $stmt->bind_param("sssssi", $name, $location, $img_url, $map_link, $on_off_status, $id);
+    $stmt = $conn->prepare("UPDATE stations SET name=?, location=?, location_x=?, location_y=?, img_url=?, map_link=?, on_off_status=? WHERE id=?");
+    $stmt->bind_param("ssddsssi", $name, $location, $locationX, $locationY, $img_url, $map_link, $on_off_status, $id);
     
     if($stmt->execute()){
         $conn->query("INSERT INTO logs (user_id, action, details) VALUES ($user_id, 'Edit Station', 'Edited station ID: $id')");

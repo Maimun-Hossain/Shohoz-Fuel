@@ -588,6 +588,14 @@ $stations = $conn->query("SELECT * FROM stations ORDER BY created_at DESC");
                     <label>Location Name</label>
                     <input type="text" name="location" id="modalLocation" placeholder="e.g. Cityville" required>
                 </div>
+                <div>
+                  <label>X Coordinate</label>
+                  <input type="number" name="location_x" id="modalLocationX" step="0.01" placeholder="e.g. 14.40" required>
+                </div>
+                <div>
+                  <label>Y Coordinate</label>
+                  <input type="number" name="location_y" id="modalLocationY" step="0.01" placeholder="e.g. 16.80" required>
+                </div>
                 <div style="grid-column: span 2;">
                     <label>Image URL</label>
                     <input type="text" name="img_url" id="modalImg" placeholder="Link to station image">
@@ -698,6 +706,8 @@ $stations = $conn->query("SELECT * FROM stations ORDER BY created_at DESC");
         document.getElementById('stationId').value = '';
         document.getElementById('modalName').value = '';
         document.getElementById('modalLocation').value = '';
+        document.getElementById('modalLocationX').value = '';
+        document.getElementById('modalLocationY').value = '';
         document.getElementById('modalImg').value = '';
         document.getElementById('modalMap').value = '';
         document.getElementById('modalOnOffStatus').value = 'on';
@@ -711,6 +721,8 @@ $stations = $conn->query("SELECT * FROM stations ORDER BY created_at DESC");
         document.getElementById('stationId').value = s.id;
         document.getElementById('modalName').value = s.name;
         document.getElementById('modalLocation').value = s.location;
+        document.getElementById('modalLocationX').value = s.location_x;
+        document.getElementById('modalLocationY').value = s.location_y;
         document.getElementById('modalImg').value = s.img_url;
         document.getElementById('modalMap').value = s.map_link;
         document.getElementById('modalOnOffStatus').value = (s.on_off_status === 'off') ? 'off' : 'on';
